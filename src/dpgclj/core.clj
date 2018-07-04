@@ -4,16 +4,20 @@
 (def diceware_file_polish (slurp "diceware-pl.txt"))
 (def diceware_file_english (slurp "diceware-en.txt"))
 
-(defn get-all-lines [source]
-  (clojure.string/split-lines source))
-
 (defstruct diceware-repository :words :length :dices :language)
 (defstruct repository :en :pl)
 
-(defn extract-words [words-list]
-  (def lines (clojure.string/split-lines words-list))
+(defn extract-words [lines]
   (def words (for [w lines :let [words (last (clojure.string/split w #"\t"))]] words))
   words
+  )
+
+(defn extract-words-from-file [file]
+  (def lines (clojure.string/split-lines file))
+  (if (clojure.string/includes? (first lines) "\t")
+    (extract-words lines)
+    lines
+    )
   )
 
 (defn create-sub-repository [language, words-list]
@@ -26,10 +30,10 @@
   sub-repository)
 
 (defn create-repository []
-  (def lines_pl (get-all-lines diceware_file_polish))
-  (def lines_en (get-all-lines diceware_file_english))
-  (def polish-repository (create-sub-repository "pl" lines_pl))
-  (def english-repository (create-sub-repository "en" (extract-words diceware_file_english)))
+  (def words-pl (extract-words-from-file diceware_file_polish))
+  (def words-en (extract-words-from-file diceware_file_english))
+  (def polish-repository (create-sub-repository "pl" words-pl))
+  (def english-repository (create-sub-repository "en" words-en))
   (def repository (vector polish-repository english-repository))
   repository
   )
@@ -48,7 +52,6 @@
 
 (defn -main
   [& args]
-  (println "args: " (str args))
   (def repository (create-repository))
   (diceware-info (first repository))
   (diceware-info (last repository))
