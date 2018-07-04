@@ -12,9 +12,8 @@
 
 (defn extract-words [words-list]
   (def lines (clojure.string/split-lines words-list))
-  (for [w lines :let [words (last (clojure.string/split w #"\t"))]] words)
-  ;; (for [w (extract-words english_list) :let [words (last (clojure.string/split w #"\t"))]] words)
-  ;; (for [w (extract-words english_list) :let [words (last (clojure.string/split w #"\t"))]] words)
+  (def words (for [w lines :let [words (last (clojure.string/split w #"\t"))]] words))
+  words
   )
 
 (defn create-repository []
@@ -31,13 +30,13 @@
                                      :length (count lines_pl)
                                      :dices 0
                                      :language "pl"))
-  ;;(def english-repository (struct-map diceware-repository
-  ;;                                    :words (extract-words lines_en)
-  ;;                                    :length (count lines_en)
-  ;;                                    :dices 0
-  ;;                                    :language "en"))
+  (def english-repository (struct-map diceware-repository
+                                      :words (extract-words diceware_file_english)
+                                      :length (count lines_en)
+                                      :dices 0
+                                      :language "en"))
   ;;(vector polish-repository english-repository)
-  (def repository (vector polish-repository))
+  (def repository (vector polish-repository english-repository))
   repository
   )
 
@@ -45,9 +44,9 @@
                       (println "this is not implemented yet!"))
 
 (defn diceware-info [diceware]
+  (println "---[ repository info ]---")
   (println "language: " (str (get diceware :language)))
-  (println "first word: " (
-                           str(first(get diceware :words))))
+  (println "first word: " (str(first(get diceware :words))))
   (println "dices: " (str (get diceware :dices)))
   (println "lenght: " (str (get diceware :length)))
   )
