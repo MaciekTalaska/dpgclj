@@ -29,12 +29,17 @@
                                   ))
   sub-repository)
 
-(defn create-repository []
-  (def words-pl (extract-words-from-file diceware_file_polish))
-  (def words-en (extract-words-from-file diceware_file_english))
-  (def polish-repository (create-sub-repository "pl" words-pl))
-  (def english-repository (create-sub-repository "en" words-en))
-  (def repository (vector polish-repository english-repository))
+(defn create-repository [language, file]
+  (def words (extract-words-from-file file))
+  (def repository (create-sub-repository language words))
+  repository
+  )
+
+(defn create-repositories []
+  (def repository
+    (vector
+     (create-repository "pl" diceware_file_polish)
+     (create-repository "en" diceware_file_english)))
   repository
   )
 
@@ -49,10 +54,9 @@
   (println "lenght: " (str (get diceware :length)))
   )
 
-
 (defn -main
   [& args]
-  (def repository (create-repository))
+  (def repository (create-repositories))
   (diceware-info (first repository))
   (diceware-info (last repository))
   )
