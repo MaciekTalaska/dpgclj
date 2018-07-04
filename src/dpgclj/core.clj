@@ -16,19 +16,20 @@
   words
   )
 
+(defn create-sub-repository [language, words-list]
+  (def sub-repository (struct-map diceware-repository
+                                  :words words-list
+                                  :length (count words-list)
+                                  :dices 0
+                                  :language language
+                                  ))
+  sub-repository)
+
 (defn create-repository []
   (def lines_pl (get-all-lines diceware_file_polish))
   (def lines_en (get-all-lines diceware_file_english))
-  (def polish-repository (struct-map diceware-repository
-                                     :words lines_pl
-                                     :length (count lines_pl)
-                                     :dices 0
-                                     :language "pl"))
-  (def english-repository (struct-map diceware-repository
-                                      :words (extract-words diceware_file_english)
-                                      :length (count lines_en)
-                                      :dices 0
-                                      :language "en"))
+  (def polish-repository (create-sub-repository "pl" lines_pl))
+  (def english-repository (create-sub-repository "en" (extract-words diceware_file_english)))
   (def repository (vector polish-repository english-repository))
   repository
   )
@@ -47,6 +48,7 @@
 
 (defn -main
   [& args]
+  (println "args: " (str args))
   (def repository (create-repository))
   (diceware-info (first repository))
   (diceware-info (last repository))
