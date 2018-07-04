@@ -19,12 +19,6 @@
 (defn create-repository []
   (def lines_pl (get-all-lines diceware_file_polish))
   (def lines_en (get-all-lines diceware_file_english))
-  ;;(def first_english (first lines_en))
-  ;;(def first_polish (first lines_pl))
-  ;;(print "first polish word: ")
-  ;;(println first_polish)
-  ;;(print "first english word: ")
-  ;;(println first_english)
   (def polish-repository (struct-map diceware-repository
                                      :words lines_pl
                                      :length (count lines_pl)
@@ -35,7 +29,6 @@
                                       :length (count lines_en)
                                       :dices 0
                                       :language "en"))
-  ;;(vector polish-repository english-repository)
   (def repository (vector polish-repository english-repository))
   repository
   )
