@@ -43,8 +43,12 @@
   repository
   )
 
-(defn get-repo-by-language [language]
-                      (println "this is not implemented yet!"))
+(defn get-repo-by-language [language, repositories]
+  (if (= language (get (first repositories) :language))
+    (first repositories)
+    (last repositories)
+    )
+  )
 
 (defn diceware-info [diceware]
   (println "---[ repository info ]---")
@@ -57,6 +61,6 @@
 (defn -main
   [& args]
   (def repository (create-repositories))
-  (diceware-info (first repository))
-  (diceware-info (last repository))
+  ;;(diceware-info (first repository))
+  ;;(diceware-info (last repository))
   )
