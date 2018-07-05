@@ -1,11 +1,7 @@
 (ns dpgclj.core
   (:gen-class))
 
-(def diceware_file_polish (slurp "diceware-pl.txt"))
-(def diceware_file_english (slurp "diceware-en.txt"))
-
 (defn is-diceware-file? [filename] (clojure.string/includes? filename "diceware-"))
-
 
 (defstruct language-and-file :filename :language)
 
@@ -17,7 +13,6 @@
   )
 
 (defn extract-language-from-filename [filename]
-  ;;(println "extract-language-from-filename: " (str filename))
   (def language (nth
                  (re-matches #"(.*-)([a-z]{2})(\..*)" filename)
     2))
@@ -72,10 +67,18 @@
   )
 
 (defn create-repositories []
+  (def all-files (get-files-with-languages))
   (def repository
     (vector
-     (create-repository "pl" diceware_file_polish)
-     (create-repository "en" diceware_file_english)))
+     (create-repository
+      (get (first all-files) :language)
+      (slurp (get (first all-files) :filename)))
+     (
+      create-repository
+      (get (last all-files) :language)
+      (slurp (get (last all-files) :filename))
+      )
+     ))
   repository
   )
 
