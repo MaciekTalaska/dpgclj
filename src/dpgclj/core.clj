@@ -4,6 +4,42 @@
 (def diceware_file_polish (slurp "diceware-pl.txt"))
 (def diceware_file_english (slurp "diceware-en.txt"))
 
+(defn is-diceware-file? [filename] (clojure.string/includes? filename "diceware-"))
+
+
+(defstruct language-and-file :filename :language)
+
+(defn get-all-diceware-files []
+  (def all-files
+    (mapv str(filter #(.isFile %) (file-seq (clojure.java.io/file ".")))))
+  (def diceware-files (filter is-diceware-file? all-files))
+  diceware-files
+  )
+
+(defn extract-language-from-filename [filename]
+  ;;(println "extract-language-from-filename: " (str filename))
+  (def language (nth
+                 (re-matches #"(.*-)([a-z]{2})(\..*)" filename)
+    2))
+  (def pair (struct-map language-and-file
+                        :filename filename
+                        :language language
+                        ))
+  pair
+  )
+
+(defn get-files-with-languages []
+  (def files (get-all-diceware-files))
+  (def f0 (first files))
+  (def f1 (last files))
+  (def files-with-languages
+    (vector
+     (extract-language-from-filename f0)
+     (extract-language-from-filename f1)))
+  files-with-languages
+  )
+
+
 (defstruct diceware-repository :words :length :dices :language)
 (defstruct repository :en :pl)
 
