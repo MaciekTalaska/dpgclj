@@ -26,14 +26,6 @@
 (defn get-files-with-languages []
   (def files (get-all-diceware-files))
   (mapv extract-language-from-filename files)
-  ;; (def files (get-all-diceware-files))
-  ;; (def f0 (first files))
-  ;; (def f1 (last files))
-  ;; (def files-with-languages
-  ;;   (vector
-  ;;    (extract-language-from-filename f0)
-  ;;    (extract-language-from-filename f1)))
-  ;; files-with-languages
   )
 
 
@@ -77,18 +69,6 @@
                (slurp (get file-language :filename)))
           ) all-files)
     )
-  ;; (def repository
-  ;;   (vector
-  ;;    (create-repository
-  ;;     (get (first all-files) :language)
-  ;;     (slurp (get (first all-files) :filename)))
-  ;;    (
-  ;;     create-repository
-  ;;     (get (last all-files) :language)
-  ;;     (slurp (get (last all-files) :filename))
-  ;;     )
-  ;;    ))
-  ;;(into [] repository)
   repository
   )
 
@@ -111,7 +91,7 @@
 (defn -main
   [& args]
   (def repository (create-repositories))
-  (diceware-info (first repository))
-  (diceware-info (second repository))
-  ;;(map (fn [x] (diceware-info x)) repository)
+  ;; (diceware-info (first repository))
+  ;; (diceware-info (second repository))
+  (map (fn [x] (diceware-info x)) repository)
   )
