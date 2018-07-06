@@ -25,13 +25,15 @@
 
 (defn get-files-with-languages []
   (def files (get-all-diceware-files))
-  (def f0 (first files))
-  (def f1 (last files))
-  (def files-with-languages
-    (vector
-     (extract-language-from-filename f0)
-     (extract-language-from-filename f1)))
-  files-with-languages
+  (mapv extract-language-from-filename files)
+  ;; (def files (get-all-diceware-files))
+  ;; (def f0 (first files))
+  ;; (def f1 (last files))
+  ;; (def files-with-languages
+  ;;   (vector
+  ;;    (extract-language-from-filename f0)
+  ;;    (extract-language-from-filename f1)))
+  ;; files-with-languages
   )
 
 
@@ -46,7 +48,7 @@
 (defn extract-words-from-file [file]
   (def lines (clojure.string/split-lines file))
   (if (clojure.string/includes? (first lines) "\t")
-    (extract-words lines)
+    (into [] (extract-words lines))
     lines
     )
   )
@@ -69,16 +71,24 @@
 (defn create-repositories []
   (def all-files (get-files-with-languages))
   (def repository
-    (vector
-     (create-repository
-      (get (first all-files) :language)
-      (slurp (get (first all-files) :filename)))
-     (
-      create-repository
-      (get (last all-files) :language)
-      (slurp (get (last all-files) :filename))
-      )
-     ))
+    (mapv (fn [file-language]
+              (create-repository
+               (get file-language :language)
+               (slurp (get file-language :filename)))
+          ) all-files)
+    )
+  ;; (def repository
+  ;;   (vector
+  ;;    (create-repository
+  ;;     (get (first all-files) :language)
+  ;;     (slurp (get (first all-files) :filename)))
+  ;;    (
+  ;;     create-repository
+  ;;     (get (last all-files) :language)
+  ;;     (slurp (get (last all-files) :filename))
+  ;;     )
+  ;;    ))
+  ;;(into [] repository)
   repository
   )
 
@@ -91,6 +101,7 @@
 
 (defn diceware-info [diceware]
   (println "---[ repository info ]---")
+  (println "type: " (str (type diceware)))
   (println "language: " (str (get diceware :language)))
   (println "first word: " (str(first(get diceware :words))))
   (println "dices: " (str (get diceware :dices)))
@@ -100,6 +111,7 @@
 (defn -main
   [& args]
   (def repository (create-repositories))
-  ;;(diceware-info (first repository))
-  ;;(diceware-info (last repository))
+  (diceware-info (first repository))
+  (diceware-info (second repository))
+  ;;(map (fn [x] (diceware-info x)) repository)
   )
