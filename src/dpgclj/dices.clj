@@ -9,11 +9,14 @@
   )
 
 (defn get-random-words [language, repositories, count]
-  (println "this function is not implemented yet")
+  (def output (range count))
+  (def words (mapv (fn [x] (get-random-word language, repositories)) output))
+  words
   )
 
 (defn create-password [language, repositories, count, separator]
-  (println "this function is not implemented yet")
+  (def words (get-random-words language repositories count))
+  (clojure.string/join separator words)
   )
 
 (defn create-all-passwords [language, repositories, count, separator, passwords-count]
