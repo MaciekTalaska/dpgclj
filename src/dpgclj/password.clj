@@ -1,4 +1,4 @@
-(ns dpgclj.dices
+(ns dpgclj.password
   (:require [dpgclj.diceware :as dw]))
 
 (defn get-random-word [language, repositories]
