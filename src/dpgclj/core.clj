@@ -1,97 +1,33 @@
 (ns dpgclj.core
-  (:gen-class))
-
-(defn is-diceware-file? [filename] (clojure.string/includes? filename "diceware-"))
-
-(defstruct language-and-file :filename :language)
-
-(defn get-all-diceware-files []
-  (def all-files
-    (mapv str(filter #(.isFile %) (file-seq (clojure.java.io/file ".")))))
-  (def diceware-files (filter is-diceware-file? all-files))
-  diceware-files
-  )
-
-(defn extract-language-from-filename [filename]
-  (def language (nth
-                 (re-matches #"(.*-)([a-z]{2})(\..*)" filename)
-    2))
-  (def pair (struct-map language-and-file
-                        :filename filename
-                        :language language
-                        ))
-  pair
-  )
-
-(defn get-files-with-languages []
-  (def files (get-all-diceware-files))
-  (mapv extract-language-from-filename files)
-  )
-
-
-(defstruct diceware-repository :words :length :dices :language)
-(defstruct repository :en :pl)
-
-(defn extract-words [lines]
-  (def words (for [w lines :let [words (last (clojure.string/split w #"\t"))]] words))
-  words
-  )
-
-(defn extract-words-from-file [file]
-  (def lines (clojure.string/split-lines file))
-  (if (clojure.string/includes? (first lines) "\t")
-    (into [] (extract-words lines))
-    lines
-    )
-  )
-
-(defn create-sub-repository [language, words-list]
-  (def sub-repository (struct-map diceware-repository
-                                  :words words-list
-                                  :length (count words-list)
-                                  :dices 0
-                                  :language language
-                                  ))
-  sub-repository)
-
-(defn create-repository [language, file]
-  (def words (extract-words-from-file file))
-  (def repository (create-sub-repository language words))
-  repository
-  )
-
-(defn create-repositories []
-  (def all-files (get-files-with-languages))
-  (def repository
-    (mapv (fn [file-language]
-              (create-repository
-               (get file-language :language)
-               (slurp (get file-language :filename)))
-          ) all-files)
-    )
-  repository
-  )
-
-(defn get-repo-by-language [language, repositories]
-  (if (= language (get (first repositories) :language))
-    (first repositories)
-    (last repositories)
-    )
-  )
-
-(defn diceware-info [diceware]
-  (println "---[ repository info ]---")
-  (println "type: " (str (type diceware)))
-  (println "language: " (str (get diceware :language)))
-  (println "first word: " (str(first(get diceware :words))))
-  (println "dices: " (str (get diceware :dices)))
-  (println "lenght: " (str (get diceware :length)))
-  )
+  (:gen-class)
+  (:require [dpgclj.diceware :as dw]))
 
 (defn -main
   [& args]
-  (def repository (create-repositories))
-  ;; (diceware-info (first repository))
-  ;; (diceware-info (second repository))
-  (map (fn [x] (diceware-info x)) repository)
+  (def repository (dw/create-repositories))
+
+  ;; according to https://stackoverflow.com/a/8536695
+  ;; doseq should be used instead of map/for when dealing with side-effects
+  (doseq [r repository] (dw/diceware-info r))
+  ;; (println (dw/hello))
+  ;; (def r(dw/create-repositories))
+  ;; (println (str "repo type: " (type r)))
+  ;; (println "repo size: " (str (count r))) 
+  ;; (for [x r] (println x))
+  ;; (map dw/diceware-info r)
+  ;; (dw/diceware-info (first r))
+  ;; (dw/diceware-info (second r))
+  ;; (println "first map & diceware-info")
+  ;; (map (fn [x] (dw/diceware-info x)) r)
+  ;; (println "iterating over results using for...")
+  ;; (for [x r ] (dw/diceware-info x) )
+  ;; (println r)
+  ;; (println "second map & diceware-info")
+  ;; (map (fn [x] 
+  ;;        (
+  ;;         (println (get x :language))
+  ;;         (println (get x :length))
+  ;;         (println (get x :dices))
+  ;;         (println (take 5 (get x :words)))
+  ;;         )) r)
   )
