@@ -20,5 +20,7 @@
   )
 
 (defn create-all-passwords [language, repositories, count, separator, passwords-count]
-  (println "this function is not implemented yet")
+  (def all-passwords (range passwords-count))
+  (def passwords (mapv (fn [x] (create-password language repositories count separator)) all-passwords))
+  (clojure.string/join "\n" passwords)
   )

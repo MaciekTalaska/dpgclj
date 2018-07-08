@@ -14,5 +14,6 @@
   ;; (doseq [r repository] (dw/diceware-info r))
   ;; (println (pass/get-random-word "pl" repository))
   ;; (println (pass/get-random-words "pl" repository 5))
-  (println (pass/create-password "pl" repository 5 "."))
+  ;; (println (pass/create-password "pl" repository 5 "."))
+  (println (pass/create-all-passwords "pl" repository 5 "." 3))
   )
