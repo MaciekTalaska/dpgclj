@@ -66,15 +66,15 @@
   (def repository
     (mapv (fn [file-language]
               (create-repository
-               (get file-language :language)
-               (slurp (get file-language :filename)))
+               (file-language :language)
+               (slurp (file-language :filename)))
           ) all-files)
     )
   repository
   )
 
 (defn get-repo-by-language [language, repositories]
-  (if (= language (get (first repositories) :language))
+  (if (= language ((first repositories) :language))
     (first repositories)
     (last repositories)
     )
@@ -83,8 +83,8 @@
 (defn diceware-info [diceware]
   (println "---[ repository info ]---")
   (println "  type: " (str (type diceware)))
-  (println "  language: " (str (get diceware :language)))
-  (println "  first words: " (clojure.string/join "-" (take 10 (get diceware :words))))
-  ;; (println "  dices: " (str (get diceware :dices)))
-  (println "  lenght: " (str (get diceware :length)))
+  (println "  language: " (str (diceware :language)))
+  (println "  first words: " (clojure.string/join "-" (take 10 (diceware :words))))
+  ;; (println "  dices: " (str (diceware :dices)))
+  (println "  lenght: " (str (diceware :length)))
   )

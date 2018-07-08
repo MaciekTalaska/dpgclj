@@ -3,7 +3,7 @@
 
 (defn get-random-word [language, repositories]
   (def repo (dw/get-repo-by-language language repositories))
-  (def index (rand-int (dec (get repo :length))))
+  (def index (rand-int (dec (repo :length))))
   (def word (nth (get repo :words) index))
   word
   )
