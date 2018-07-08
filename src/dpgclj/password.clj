@@ -1,9 +1,11 @@
 (ns dpgclj.password
-  (:require [dpgclj.diceware :as dw]))
+  (:require [dpgclj.diceware :as dw])
+  (:require [dpgclj.crypto :as crypto])
+  )
 
 (defn get-random-word [language, repositories]
   (def repo (dw/get-repo-by-language language repositories))
-  (def index (rand-int (dec (repo :length))))
+  (def index (crypto/secure-rand-int (dec (repo :length))))
   (def word (nth (get repo :words) index))
   word
   )
