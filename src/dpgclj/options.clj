@@ -30,21 +30,40 @@
 
 (defn get-passwords-count [input]
   (def passwords-option (re-matches #"(.*)(-p:)([0-9*])(.*)" input))
-  {:passwords (read-string(passwords-option 3))}
+  (if (or
+           (nil? passwords-option)
+           (empty? (passwords-option 3))
+           )
+    {:passwords 1}
+    {:passwords (read-string (passwords-option 3))}
+    )
   )
 
 (defn get-separator [input]
   (def separator-option (re-matches #"(.*)(-s:)(.)(.*)" input))
-  {:separator (separator-option 3)}
+  (if (or
+       (nil? separator-option)
+       (empty? (separator-option 3)))
+    {:separator "-"}
+    {:separator (separator-option 3)}
+    )
   )
 
+(defn check-required-options [args]
+  (if-not (and
+           (clojure.string/includes? args "-l:")
+           (clojure.string/includes? args "-w:"))
+    ((println "error: not enough arguments provided!\n")
+     (print-help)
+     (System/exit 1))
+    ()))
+
 (defn get-options [& args]
-  (def args-string (clojure.string/join " " args))
+  (def str-args (clojure.string/join " " args))
+  (check-required-options str-args)
   (merge
-   (get-language args-string)
-   (get-words-count args-string)
-   (get-separator args-string)
-   (get-passwords-count args-string)
-   ()
-   )
- )
+   (get-language str-args)
+   (get-words-count str-args)
+   (get-separator str-args)
+   (get-passwords-count str-args)))
+

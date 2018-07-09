@@ -9,13 +9,19 @@
 (defn -main
   [& args]
 
-  (def options (opt/get-options args))
-  (def repository (dw/create-repositories))
+  (if-not (empty? args)
+    (
+     (def options (opt/get-options args))
+     (def repository (dw/create-repositories))
 
-  (println (pass/create-all-passwords
-            (options :language)
-            repository
-            (options :words)
-            (options :separator)
-            (options :passwords)))
+     (println (pass/create-all-passwords
+              (options :language)
+              repository
+              (options :words)
+              (options :separator)
+              (options :passwords))))
+    (
+     (opt/print-help)
+     (System/exit 1))
+    )
   )
