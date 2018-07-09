@@ -20,12 +20,32 @@
 
 (defn get-language [input]
   (def language-option(re-matches #"(.*)(-l:)([a-z]{2})(.*)" input))
-  {:language (language-option 3)}
+  (if (or
+       (nil? language-option)
+       (empty? language-option)
+       )
+    {:error "no language specified"}
+    {:language (language-option 3)}
+    )
   )
 
 (defn get-words-count [input]
   (def words-option (re-matches #"(.*)(-w:)([0-9]*)(.*)" input))
-  {:words (read-string (words-option 3))}
+  (def words (words-option 3))
+  (if (or
+       (nil? words-option)
+       (empty? words-option)
+       (empty? (words-option 3))
+       )
+    {:error "no password length (in words) provided"}
+    (if (or
+         (> (read-string words)  255)
+         (< (read-string words) 1)
+         )
+      {:error "password should be at least 1 and max 255 words long"}
+      {:words (read-string words)}
+      )
+    )
   )
 
 (defn get-passwords-count [input]
@@ -53,7 +73,8 @@
   (if-not (and
            (clojure.string/includes? args "-l:")
            (clojure.string/includes? args "-w:"))
-    ((println "error: not enough arguments provided!\n")
+    ((println "error: both '-l' and '-w' has to be provided!\n")
+     ;(println "use -h for help")
      (print-help)
      (System/exit 1))
     ()))
@@ -67,3 +88,9 @@
    (get-separator str-args)
    (get-passwords-count str-args)))
 
+(defn exit-if-invalid-options [options]
+  (contains? options :error)
+  (println (options :error))
+  ; TODO: print "use -h for help" and implement -h for help
+  (System/exit 1)
+  )

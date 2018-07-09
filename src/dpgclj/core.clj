@@ -12,6 +12,8 @@
   (if-not (empty? args)
     (
      (def options (opt/get-options args))
+     (opt/exit-if-invalid-options options)
+
      (def repository (dw/create-repositories))
 
      (println (pass/create-all-passwords
