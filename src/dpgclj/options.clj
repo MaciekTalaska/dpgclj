@@ -48,8 +48,3 @@
    ()
    )
  )
-
-(defn test-options []
-  (def all-options (get-options "-l:pl" "-w:5" "-s:*" "-p:3"))
-  all-options
-  )
