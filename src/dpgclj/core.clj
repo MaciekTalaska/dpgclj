@@ -21,7 +21,9 @@
               repository
               (options :words)
               (options :separator)
-              (options :passwords))))
+              (options :passwords)))
+     (System/exit 0)
+     )
     (
      (opt/print-help)
      (System/exit 1))

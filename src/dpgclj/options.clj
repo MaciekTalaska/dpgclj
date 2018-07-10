@@ -1,10 +1,10 @@
 (ns dpgclj.options)
 
-(defstruct dpg-options
-  :language
-  :words-count
-  :separator
-  :passwords-count)
+;(defstruct dpg-options
+;  :language
+;  :words-count
+;  :separator
+;  :passwords-count)
 
 (defn print-help []
   (println "Diceware Password Generator (Clojure version)")
@@ -16,6 +16,12 @@
   (println "-w:words - number of words password should be build of")
   (println "-s:separator - char to be used as words separator")
   (println "-p:passwords - number of passwords to generate")
+  )
+
+(defn print-error [messages]
+  (print "error: ")
+  (println messages)
+  (println "\nuse `-h` for help")
   )
 
 (defn get-language [input]
@@ -73,15 +79,26 @@
   (if-not (and
            (clojure.string/includes? args "-l:")
            (clojure.string/includes? args "-w:"))
-    ((println "error: both '-l' and '-w' has to be provided!\n")
-     ;(println "use -h for help")
-     (print-help)
+    ((print-error "both '-l' and '-w' have to be provided!")
      (System/exit 1))
     ()))
 
-(defn get-options [& args]
+(defn check-if-help [args]
+  (if (and
+       (= (count args) 1)
+       (= (first args) "-h"))
+    (
+     (print-help)
+     (System/exit 0)
+     )
+    )
+  )
+
+(defn get-options [args]
   (def str-args (clojure.string/join " " args))
+  (check-if-help args)
   (check-required-options str-args)
+
   (merge
    (get-language str-args)
    (get-words-count str-args)
@@ -89,8 +106,9 @@
    (get-passwords-count str-args)))
 
 (defn exit-if-invalid-options [options]
-  (contains? options :error)
-  (println (options :error))
-  ; TODO: print "use -h for help" and implement -h for help
-  (System/exit 1)
+  (if (contains? options :error)
+    (
+     (print-error (options :error))
+     (System/exit 1))
+    )
   )
