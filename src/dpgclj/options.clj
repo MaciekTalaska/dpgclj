@@ -1,11 +1,5 @@
 (ns dpgclj.options)
 
-;(defstruct dpg-options
-;  :language
-;  :words-count
-;  :separator
-;  :passwords-count)
-
 (defn print-help []
   (println "Diceware Password Generator (Clojure version)")
   (println "2018 by Maciek Talaska")
