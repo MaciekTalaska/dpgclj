@@ -2,14 +2,14 @@
  ;;(:gen-class) 
  )
 
-(defn is-diceware-file? [filename] (clojure.string/includes? filename "diceware-"))
+(defn diceware-file? [filename] (clojure.string/includes? filename "diceware-"))
 
 (defstruct language-and-file :filename :language)
 
 (defn get-all-diceware-files []
   (def all-files
     (mapv str(filter #(.isFile %) (file-seq (clojure.java.io/file ".")))))
-  (def diceware-files (filter is-diceware-file? all-files))
+  (def diceware-files (filter diceware-file? all-files))
   diceware-files
   )
 
