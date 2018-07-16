@@ -12,13 +12,9 @@
   (mapv (fn [x] (get-random-word language, repositories)) (range count)))
 
 (defn create-password [language, repositories, count, separator]
-  (let [words (get-random-words language repositories count)]
-    (clojure.string/join separator words)))
+  (clojure.string/join separator (get-random-words language repositories count)))
 
 (defn create-all-passwords [language, repositories, count, separator, passwords-count]
   (let [all-passwords (range passwords-count)]
     (let [passwords (mapv (fn [x] (create-password language repositories count separator)) all-passwords)]
-      (clojure.string/join "\n" passwords)
-      )
-    )
-  )
+      (clojure.string/join "\n" passwords))))
