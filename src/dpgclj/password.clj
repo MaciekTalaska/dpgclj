@@ -4,25 +4,21 @@
   )
 
 (defn get-random-word [language, repositories]
-  (def repo (dw/get-repo-by-language language repositories))
-  (def index (crypto/secure-rand-int (dec (repo :length))))
-  (def word (nth (get repo :words) index))
-  word
-  )
+  (let [repo (dw/get-repo-by-language language repositories)]
+    (let [index (crypto/secure-rand-int (dec (repo :length)))]
+      (nth (get repo :words) index))))
 
 (defn get-random-words [language, repositories, count]
-  (def output (range count))
-  (def words (mapv (fn [x] (get-random-word language, repositories)) output))
-  words
-  )
+  (mapv (fn [x] (get-random-word language, repositories)) (range count)))
 
 (defn create-password [language, repositories, count, separator]
-  (def words (get-random-words language repositories count))
-  (clojure.string/join separator words)
-  )
+  (let [words (get-random-words language repositories count)]
+    (clojure.string/join separator words)))
 
 (defn create-all-passwords [language, repositories, count, separator, passwords-count]
-  (def all-passwords (range passwords-count))
-  (def passwords (mapv (fn [x] (create-password language repositories count separator)) all-passwords))
-  (clojure.string/join "\n" passwords)
+  (let [all-passwords (range passwords-count)]
+    (let [passwords (mapv (fn [x] (create-password language repositories count separator)) all-passwords)]
+      (clojure.string/join "\n" passwords)
+      )
+    )
   )
