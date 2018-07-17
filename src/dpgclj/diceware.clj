@@ -7,17 +7,14 @@
 (defstruct language-and-file :filename :language)
 
 (defn get-all-diceware-files []
-  (def all-files
-    (mapv str(filter #(.isFile %) (file-seq (clojure.java.io/file ".")))))
-  (def diceware-files (filter diceware-file? all-files))
-  diceware-files
-  )
+  (let [all-files (mapv str(filter #(.isFile %) (file-seq (clojure.java.io/file "."))))]
+    (filter diceware-file? all-files)))
 
 (defn extract-language-from-filename [filename]
   (let [language (nth (re-matches #"(.*-)([a-z]{2})(\..*)" filename) 2)]
     (struct-map language-and-file
-                :filename filename
-                :language language)))
+      :filename filename
+      :language language)))
 
 (defn get-files-with-languages []
   (let [files (get-all-diceware-files)]
@@ -31,12 +28,10 @@
   (for [w lines :let [words (last (clojure.string/split w #"\t"))]] words))
 
 (defn extract-words-from-file [file]
-  (def lines (clojure.string/split-lines file))
-  (if (clojure.string/includes? (first lines) "\t")
-    (into [] (extract-words lines))
-    lines
-    )
-  )
+  (let [lines (clojure.string/split-lines file)]
+    (if (clojure.string/includes? (first lines) "\t")
+      (into [] (extract-words lines))
+      lines)))
 
 (defn create-sub-repository [language, words-list]
   (struct-map diceware-repository
