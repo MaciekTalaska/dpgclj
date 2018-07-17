@@ -56,29 +56,21 @@
   sub-repository)
 
 (defn create-repository [language, file]
-  (def words (extract-words-from-file file))
-  (def repository (create-sub-repository language words))
-  repository
-  )
+  (let [words (extract-words-from-file file)]
+    (create-sub-repository language words)))
 
 (defn create-repositories []
-  (def all-files (get-files-with-languages))
-  (def repository
+  (let [all-files (get-files-with-languages)]
     (mapv (fn [file-language]
-              (create-repository
-               (file-language :language)
-               (slurp (file-language :filename)))
-          ) all-files)
-    )
-  repository
-  )
+            (create-repository
+             (file-language :language)
+             (slurp (file-language :filename)))
+            ) all-files)))
 
 (defn get-repo-by-language [language, repositories]
   (if (= language ((first repositories) :language))
     (first repositories)
-    (last repositories)
-    )
-  )
+    (last repositories)))
 
 (defn diceware-info [diceware]
   (println "---[ repository info ]---")
