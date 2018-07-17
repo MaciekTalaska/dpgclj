@@ -14,29 +14,21 @@
   )
 
 (defn extract-language-from-filename [filename]
-  (def language (nth
-                 (re-matches #"(.*-)([a-z]{2})(\..*)" filename)
-    2))
-  (def pair (struct-map language-and-file
-                        :filename filename
-                        :language language
-                        ))
-  pair
-  )
+  (let [language (nth (re-matches #"(.*-)([a-z]{2})(\..*)" filename) 2)]
+    (struct-map language-and-file
+                :filename filename
+                :language language)))
 
 (defn get-files-with-languages []
-  (def files (get-all-diceware-files))
-  (mapv extract-language-from-filename files)
-  )
+  (let [files (get-all-diceware-files)]
+    (mapv extract-language-from-filename files)))
 
 
 (defstruct diceware-repository :words :length :dices :language)
 (defstruct repository :en :pl)
 
 (defn extract-words [lines]
-  (def words (for [w lines :let [words (last (clojure.string/split w #"\t"))]] words))
-  words
-  )
+  (for [w lines :let [words (last (clojure.string/split w #"\t"))]] words))
 
 (defn extract-words-from-file [file]
   (def lines (clojure.string/split-lines file))
@@ -47,13 +39,11 @@
   )
 
 (defn create-sub-repository [language, words-list]
-  (def sub-repository (struct-map diceware-repository
-                                  :words words-list
-                                  :length (count words-list)
-                                  :dices 0
-                                  :language language
-                                  ))
-  sub-repository)
+  (struct-map diceware-repository
+    :words words-list
+    :length (count words-list)
+    :dices 0
+    :language language))
 
 (defn create-repository [language, file]
   (let [words (extract-words-from-file file)]
