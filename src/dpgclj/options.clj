@@ -9,25 +9,12 @@
   (println "-l:language - specifiy language list (en/pl)")
   (println "-w:words - number of words password should be build of")
   (println "-s:separator - char to be used as words separator")
-  (println "-p:passwords - number of passwords to generate")
-  )
+  (println "-p:passwords - number of passwords to generate"))
 
 (defn print-error [messages]
   (print "error: ")
   (println messages)
-  (println "\nuse `-h` for help")
-  )
-
-(defn get-language [input]
-  (def language-option(re-matches #"(.*)(-l:)([a-z]{2})(.*)" input))
-  (if (or
-       (nil? language-option)
-       (empty? language-option)
-       )
-    {:error "no language specified"}
-    {:language (language-option 3)}
-    )
-  )
+  (println "\nuse `-h` for help"))
 
 (defn get-words-count [input]
   (def words-option (re-matches #"(.*)(-w:)([0-9]*)(.*)" input))
@@ -35,47 +22,46 @@
   (if (or
        (nil? words-option)
        (empty? words-option)
-       (empty? (words-option 3))
-       )
+       (empty? (words-option 3)))
     {:error "no password length (in words) provided"}
     (if (or
          (> (read-string words)  255)
-         (< (read-string words) 1)
-         )
+         (< (read-string words) 1))
       {:error "password should be at least 1 and max 255 words long"}
-      {:words (read-string words)}
-      )
-    )
-  )
+      {:words (read-string words)})))
 
 (defn get-passwords-count [input]
-  (def passwords-option (re-matches #"(.*)(-p:)([0-9*])(.*)" input))
-  (if (or
-           (nil? passwords-option)
-           (empty? (passwords-option 3))
-           )
-    {:passwords 1}
-    {:passwords (read-string (passwords-option 3))}
-    )
-  )
+  (let [passwords-option (re-matches #"(.*)(-p:)([0-9*])(.*)" input)]
+    (if (or
+         (nil? passwords-option)
+         (empty? (passwords-option 3))
+         )
+      {:passwords 1}
+      {:passwords (read-string (passwords-option 3))})))
+
+(defn get-language [input]
+  (let [language-option(re-matches #"(.*)(-l:)([a-z]{2})(.*)" input)]
+    (if (or
+         (nil? language-option)
+         (empty? language-option)
+         )
+      {:error "no language specified"}
+      {:language (language-option 3)})))
 
 (defn get-separator [input]
-  (def separator-option (re-matches #"(.*)(-s:)(.)(.*)" input))
-  (if (or
-       (nil? separator-option)
-       (empty? (separator-option 3)))
-    {:separator "-"}
-    {:separator (separator-option 3)}
-    )
-  )
+  (let [separator-option (re-matches #"(.*)(-s:)(.)(.*)" input)]
+    (if (or
+         (nil? separator-option)
+         (empty? (separator-option 3)))
+      {:separator "-"}
+      {:separator (separator-option 3)})))
 
 (defn check-required-options [args]
   (if-not (and
            (clojure.string/includes? args "-l:")
            (clojure.string/includes? args "-w:"))
     ((print-error "both '-l' and '-w' have to be provided!")
-     (System/exit 1))
-    ()))
+     (System/exit 1))))
 
 (defn check-if-help [args]
   (if (and
@@ -89,20 +75,17 @@
   )
 
 (defn get-options [args]
-  (def str-args (clojure.string/join " " args))
-  (check-if-help args)
-  (check-required-options str-args)
-
-  (merge
-   (get-language str-args)
-   (get-words-count str-args)
-   (get-separator str-args)
-   (get-passwords-count str-args)))
+  (let [str-args (clojure.string/join " " args)]
+    (check-if-help args)
+    (check-required-options str-args)
+    (merge
+     (get-language str-args)
+     (get-words-count str-args)
+     (get-separator str-args)
+     (get-passwords-count str-args))))
 
 (defn exit-if-invalid-options [options]
   (if (contains? options :error)
-    (
-     (print-error (options :error))
-     (System/exit 1))
-    )
-  )
+    ; if there is :error in map - print message & exit
+    ((print-error (options :error))
+     (System/exit 1))))
