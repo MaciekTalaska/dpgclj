@@ -17,19 +17,22 @@
   (println "\nuse `-h` for help"))
 
 (defn get-words-count [input]
-  (def words-option (re-matches #"(.*)(-w:)([0-9]*)(.*)" input))
-  (def words (words-option 3))
-  (if (or
-       (nil? words-option)
-       (empty? words-option)
-       (empty? (words-option 3)))
-    {:error "no password length (in words) provided"}
-    (if (or
-         (> (read-string words)  255)
-         (< (read-string words) 1))
-      {:error "password should be at least 1 and max 255 words long"}
-      {:words (read-string words)})))
+  (let [words-option (re-matches #"(.*)(-w:)([0-9]*)(.*)" input)]
+    (let [words (words-option 3)]
+      (if (or
+           (nil? words-option)
+           (empty? words-option)
+           (empty? words))
+        {:error "no password length (in words) provided"}
+        (if (or
+             (> (read-string words)  255)
+             (< (read-string words) 1))
+          {:error "password should be at least 1 and max 255 words long"}
+          {:words (read-string words)})))))
 
+;; TODO: get-passwords-count, get-language and get-separator should/could be unified:
+;; - first parameter should be regex exrepssion
+;; - second parameter should be default value (or error as for get-language if there is no value provided)
 (defn get-passwords-count [input]
   (let [passwords-option (re-matches #"(.*)(-p:)([0-9*])(.*)" input)]
     (if (or
