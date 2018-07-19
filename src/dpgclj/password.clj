@@ -1,7 +1,6 @@
 (ns dpgclj.password
   (:require [dpgclj.diceware :as dw])
-  (:require [dpgclj.crypto :as crypto])
-  )
+  (:require [dpgclj.crypto :as crypto]))
 
 (defn get-random-word [language, repositories]
   (let [repo (dw/get-repo-by-language language repositories)]

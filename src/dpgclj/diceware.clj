@@ -1,6 +1,4 @@
-(ns dpgclj.diceware
- ;;(:gen-class) 
- )
+(ns dpgclj.diceware)
 
 (defn diceware-file? [filename] (clojure.string/includes? filename "diceware-"))
 
