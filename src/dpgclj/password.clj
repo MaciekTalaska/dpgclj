@@ -14,6 +14,6 @@
   (clojure.string/join separator (get-random-words language repositories count)))
 
 (defn create-all-passwords [language, repositories, count, separator, passwords-count]
-  (let [all-passwords (range passwords-count)]
-    (let [passwords (mapv (fn [x] (create-password language repositories count separator)) all-passwords)]
-      (clojure.string/join "\n" passwords))))
+  (let [all-passwords (range passwords-count)
+        passwords (mapv (fn [x] (create-password language repositories count separator)) all-passwords)]
+    (clojure.string/join "\n" passwords)))

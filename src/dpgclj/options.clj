@@ -18,18 +18,18 @@
   (println "\nuse `-h` for help"))
 
 (defn get-words-count [input]
-  (let [words-option (re-matches #"(.*)(-w:)([0-9]*)(.*)" input)]
-    (let [words (words-option 3)]
+  (let [words-option (re-matches #"(.*)(-w:)([0-9]*)(.*)" input)
+        words (words-option 3)]
+    (if (or
+          (nil? words-option)
+          (empty? words-option)
+          (empty? words))
+      {:error "no password length (in words) provided"}
       (if (or
-           (nil? words-option)
-           (empty? words-option)
-           (empty? words))
-        {:error "no password length (in words) provided"}
-        (if (or
-             (> (read-string words)  255)
-             (< (read-string words) 1))
-          {:error "password should be at least 1 and max 255 words long"}
-          {:words (read-string words)})))))
+            (> (read-string words)  255)
+            (< (read-string words) 1))
+        {:error "password should be at least 1 and max 255 words long"}
+        {:words (read-string words)}))))
 
 (defn get-option-or-error [input regex error-message]
   (let [option (re-matches regex input)]
