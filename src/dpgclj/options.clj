@@ -1,4 +1,5 @@
-(ns dpgclj.options)
+(ns dpgclj.options
+  (:require [clojure.core.match :refer [match]]))
 
 (defn print-help []
   (println "Diceware Password Generator (Clojure version)")
@@ -30,34 +31,38 @@
           {:error "password should be at least 1 and max 255 words long"}
           {:words (read-string words)})))))
 
-;; TODO: get-passwords-count, get-language and get-separator should/could be unified:
-;; - first parameter should be regex exrepssion
-;; - second parameter should be default value (or error as for get-language if there is no value provided)
-(defn get-passwords-count [input]
-  (let [passwords-option (re-matches #"(.*)(-p:)([0-9*])(.*)" input)]
+(defn get-option-or-error [input regex error-message]
+  (let [option (re-matches regex input)]
     (if (or
-         (nil? passwords-option)
-         (empty? (passwords-option 3))
-         )
-      {:passwords 1}
-      {:passwords (read-string (passwords-option 3))})))
+         (nil? option)
+         (empty? option)
+         (empty? (option 3)))
+      {:error error-message}
+      {:ok (option 3)})))
 
-(defn get-language [input]
-  (let [language-option(re-matches #"(.*)(-l:)([a-z]{2})(.*)" input)]
+(defn get-option-or-default [input regex default]
+  (let [option (re-matches regex input)]
     (if (or
-         (nil? language-option)
-         (empty? language-option)
-         )
-      {:error "no language specified"}
-      {:language (language-option 3)})))
+         (nil? option)
+         (empty? option)
+         (empty? (option 3)))
+      {:ok default}
+      {:ok (option 3)})))
+
+(defn get-passwords-count [input]
+  (let [option (get-option-or-default input #"(.*)(-p:)([0-9*])(.*)" "1")]
+    {:passwords (read-string (:ok option))}
+    ))
+
+(defn get-language[input]
+  (let [option (get-option-or-error input #"(.*)(-l:)([a-z]{2})(.*)" "no language specified")]
+    (match option
+      {:ok _} {:language (:ok option)}
+      option)))
 
 (defn get-separator [input]
-  (let [separator-option (re-matches #"(.*)(-s:)(.)(.*)" input)]
-    (if (or
-         (nil? separator-option)
-         (empty? (separator-option 3)))
-      {:separator "-"}
-      {:separator (separator-option 3)})))
+  (let [option (get-option-or-default input #"(.*)(-s:)(.)(.*)" "-")]
+    {:separator (:ok option)}))
 
 (defn check-required-options [args]
   (if-not (and
