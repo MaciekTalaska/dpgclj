@@ -2,8 +2,7 @@
   (:gen-class)
   (:require [dpgclj.diceware :as dw])
   (:require [dpgclj.password :as pass])
-  (:require [dpgclj.options :as opt])
-  )
+  (:require [dpgclj.options :as opt]))
 
 
 (defn -main
