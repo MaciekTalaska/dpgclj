@@ -22,7 +22,15 @@ dpgclj options:
 
 ## Diceware™
 
-Diceware is a trademark of A G Reinhold.
+Diceware is a trademark of A G Reinhold. More info: http://world.std.com/~reinhold/diceware.html
+
+## Diceware lists
+
+English diceware list taken from: https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases
+'
+Polish diceware list has been created by me: https://github.com/MaciekTalaska/diceware-pl
+
+Additional lists could be found on Mathiaz Gumm'z repository: https://github.com/mgumz/diceware/tree/master/lists
 
 ## License
 
