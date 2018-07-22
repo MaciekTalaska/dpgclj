@@ -18,7 +18,23 @@ dpgclj options:
 
 `-p:[number]` - number of passwords to be generated at once.
 
+## Building project
 
+`Dpgclj` has been created using [leiningen](https://leiningen.org) - lein becomes the first requirement - install it before proceeding with any further steps.
+
+### Running lein repl
+
+To test dpgclj, or some of its functions, type `lein repl`.
+
+### Executing project
+
+`dpgclj` could be run in very simple way: `lein run`. Parameters could also be added. 
+
+### Building jar...
+
+1. `lein uberar` results in building complete jar
+
+2. `java -jar target/uberjar/dpgclj-0.1.0-SNAPSHOT-standalone.jar`. All options could be passed after the name of the jar file to be executed. 
 
 ## Diceware™
 
