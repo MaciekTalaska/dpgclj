@@ -50,7 +50,7 @@
       {:ok (option 3)})))
 
 (defn get-passwords-count [input]
-  (let [option (get-option-or-default input #"(.*)(-p:)([0-9*])(.*)" "1")]
+  (let [option (get-option-or-default input #"(.*)(-p:)([0-9]*)(.*)" "1")]
     {:passwords (read-string (:ok option))}
     ))
 
