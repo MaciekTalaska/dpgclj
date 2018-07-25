@@ -17,6 +17,18 @@
   (println messages)
   (println "\nuse `-h` for help"))
 
+(defn exit-now1! []
+  (System/exit 0))
+
+(defn exit-now! [code]
+  (System/exit code))
+
+(defn exit-with-message []
+  (exit-now1!))
+;(defn exit-with-message [code message]
+;  (print-error message)
+;  (exit-now! code))
+
 (defn get-words-count [input]
   (let [words-option (re-matches #"(.*)(-w:)([0-9]*)(.*)" input)
         words (words-option 3)]
@@ -68,19 +80,18 @@
   (if-not (and
            (clojure.string/includes? args "-l:")
            (clojure.string/includes? args "-w:"))
-    ((print-error "both '-l' and '-w' have to be provided!")
-     (System/exit 1))))
+    (exit-now1!)))
+;    ((exit-now 1))))
+;    ((exit-with-message 1 "both '-l' and '-w' have to be provided"))))
+;    ((print-error "both '-l' and '-w' have to be provided!")
+;     (exit-now1!))))
 
 (defn check-if-help [args]
   (if (and
        (= (count args) 1)
        (= (first args) "-h"))
-    (
-     (print-help)
-     (System/exit 0)
-     )
-    )
-  )
+    ((print-help)
+     (exit-now! 0))))
 
 (defn get-options [args]
   (let [str-args (clojure.string/join " " args)]
@@ -96,4 +107,4 @@
   (if (contains? options :error)
     ; if there is :error in map - print message & exit
     ((print-error (options :error))
-     (System/exit 1))))
+     (exit-now! 1))))
