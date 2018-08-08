@@ -17,17 +17,12 @@
   (println messages)
   (println "\nuse `-h` for help"))
 
-(defn exit-now1! []
-  (System/exit 0))
-
 (defn exit-now! [code]
   (System/exit code))
 
-(defn exit-with-message []
-  (exit-now1!))
-;(defn exit-with-message [code message]
-;  (print-error message)
-;  (exit-now! code))
+(defn exit-with-message! [code message]
+  (print-error message)
+  (exit-now! code))
 
 (defn get-words-count [input]
   (let [words-option (re-matches #"(.*)(-w:)([0-9]*)(.*)" input)
@@ -64,7 +59,7 @@
 (defn get-passwords-count [input]
   (let [option (get-option-or-default input #"(.*)(-p:)([0-9]*)(.*)" "1")]
     {:passwords (read-string (:ok option))}
-    ))
+))
 
 (defn get-language[input]
   (let [option (get-option-or-error input #"(.*)(-l:)([a-z]{2})(.*)" "no language specified")]
@@ -80,10 +75,8 @@
   (if-not (and
            (clojure.string/includes? args "-l:")
            (clojure.string/includes? args "-w:"))
-    (exit-now1!)))
+    (exit-with-message! 1 "both '-l' and '-w' have to be provided!")))
 ;    ((exit-now 1))))
-;    ((exit-with-message 1 "both '-l' and '-w' have to be provided"))))
-;    ((print-error "both '-l' and '-w' have to be provided!")
 ;     (exit-now1!))))
 
 (defn check-if-help [args]
