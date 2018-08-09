@@ -2,10 +2,6 @@
   (:require [clojure.test :refer :all]
             [dpgclj.options :refer :all]))
 
-(deftest simple-test-options
-  (testing "simple-test-options"
-    (is (= 10 10))))
-
 (deftest check-if-required-options-have-been-provided
   (testing "lack of -w or -l results in error message"
     (with-redefs [exit-with-message! (fn [code message] (str message))]
