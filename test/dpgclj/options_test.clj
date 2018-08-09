@@ -6,13 +6,10 @@
   (testing "simple-test-options"
     (is (= 10 10))))
 
-;(deftest l1ack-of-required-option-results-in-error-message
-(deftest first-test
-  (testing "first"
+(deftest check-if-required-options-have-been-provided
+  (testing "lack of -w or -l results in error message"
     (with-redefs [exit-with-message! (fn [code message] (str message))]
-      (is (= "both '-l' and '-w' have to be provided!" (check-required-options ["-x"]))))))
-
-(deftest second-test
+      (is (= "both '-l' and '-w' have to be provided!" (check-required-options ["-x"])))))
   (testing "second-test"
     (with-redefs [exit-with-message! (fn [code message] {:code code :message message})]
       (let [expected-code 1
