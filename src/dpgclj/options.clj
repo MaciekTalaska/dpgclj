@@ -58,8 +58,7 @@
 
 (defn get-passwords-count [input]
   (let [option (get-option-or-default input #"(.*)(-p:)([0-9]*)(.*)" "1")]
-    {:passwords (read-string (:ok option))}
-))
+    {:passwords (read-string (:ok option))}))
 
 (defn get-language[input]
   (let [option (get-option-or-error input #"(.*)(-l:)([a-z]{2})(.*)" "no language specified")]
@@ -76,8 +75,6 @@
            (clojure.string/includes? args "-l:")
            (clojure.string/includes? args "-w:"))
     (exit-with-message! 1 "both '-l' and '-w' have to be provided!")))
-;    ((exit-now 1))))
-;     (exit-now1!))))
 
 (defn check-if-help [args]
   (if (and

@@ -6,7 +6,7 @@
   (testing "lack of -w or -l results in error message"
     (with-redefs [exit-with-message! (fn [code message] (str message))]
       (is (= "both '-l' and '-w' have to be provided!" (check-required-options ["-x"])))))
-  (testing "second-test"
+  (testing "lack of requred options result in error message and exit with specific code"
     (with-redefs [exit-with-message! (fn [code message] {:code code :message message})]
       (let [expected-code 1
             expected-message "both '-l' and '-w' have to be provided!"
