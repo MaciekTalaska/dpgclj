@@ -96,5 +96,4 @@
 (defn exit-if-invalid-options [options]
   (if (contains? options :error)
     ; if there is :error in map - print message & exit
-    ((print-error (options :error))
-     (exit-now! 1))))
+    (exit-with-message! 1 (options :error))))
