@@ -12,3 +12,28 @@
             expected-message "both '-l' and '-w' have to be provided!"
             expected {:code expected-code :message expected-message}]
         (is (= expected (check-required-options ["-x"])))))))
+
+(deftest retrieve-language
+  (testing "return proper two letter code of the language"
+    (let [input "-w:5 -l:pl -s:. -p:2"
+          expected {:language "pl"}]
+      (is (= expected (get-language input))))))
+
+(deftest retrieve-number-of-words-per-password
+  (testing "return required password lenght in words"
+    (let [num (rand-int 255)
+          input (str "-w:" num)
+          expected {:words num}]
+      (is (= expected (get-words-count input)))))
+  (testing "return error if no words count provided"
+    (let [input "-w:"
+          expected {:error "no password length (in words) provided"}]
+      (is (= expected (get-words-count input)))))
+  (testing "return error if words count < 1"
+    (let [input "-w:0"
+          expected {:error "password should be at least 1 and max 255 words long"}]
+      (is (= expected (get-words-count input)))))
+  (testing "return error if words count > 255"
+    (let [input "-w:256"
+          expected {:error "password should be at least 1 and max 255 words long"}]
+      (is (= expected (get-words-count input))))))
