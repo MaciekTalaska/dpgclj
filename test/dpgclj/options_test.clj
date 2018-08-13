@@ -56,3 +56,18 @@
           input (str "-p:" num)
           expected {:passwords num}]
       (is (= expected (get-passwords-count input))))))
+
+(deftest retrieve-separator
+  (testing "return '-' by default"
+    (let [input ""
+          expected {:separator "-"}]
+      (is (= expected (get-separator input)))))
+  (testing "return one char as separator for input"
+    (let [input "-s:*"
+          expected {:separator "*"}]
+      (is (= expected (get-separator input)))))
+  (testing "return single char as separator (random input)"
+    (let [character (str (char (rand-int 99)))
+          input (str "-s:" character)
+          expected {:separator character}]
+      )))
