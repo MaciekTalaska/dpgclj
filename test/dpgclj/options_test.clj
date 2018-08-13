@@ -37,3 +37,22 @@
     (let [input "-w:256"
           expected {:error "password should be at least 1 and max 255 words long"}]
       (is (= expected (get-words-count input))))))
+
+(deftest retrieve-password-count
+  (testing "return 1 by default"
+    (let [input ""
+          expected {:passwords 1}]
+      (is (= expected (get-passwords-count input)))))
+  (testing "return 2 for -p:2"
+    (let [input "-p:2"
+          expected {:passwords 2}]
+      (is (= expected (get-passwords-count input)))))
+  (testing "return 10 for -p:10"
+    (let [input "-p:10"
+          expected {:passwords 10}]
+      (is (= expected (get-passwords-count input)))))
+  (testing "return X for -p:X"
+    (let [num (rand-int 9999)
+          input (str "-p:" num)
+          expected {:passwords num}]
+      (is (= expected (get-passwords-count input))))))
