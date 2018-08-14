@@ -1,0 +1,16 @@
+language: clojure 
+lein: lein
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: false
+    - os: osx
+  fast_finish: true
+cache: cargo
+script: lein do clean, test
+jdk: 
+  - oraclejdk8
+  - oraclejdk9
+  - oraclejdk10
+  - oraclejdk11
