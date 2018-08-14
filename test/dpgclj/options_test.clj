@@ -21,7 +21,7 @@
 
 (deftest retrieve-number-of-words-per-password
   (testing "return required password lenght in words"
-    (let [num (rand-int 255)
+    (let [num (+ 1 (rand-int 254))
           input (str "-w:" num)
           expected {:words num}]
       (is (= expected (get-words-count input)))))
