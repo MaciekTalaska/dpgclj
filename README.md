@@ -1,6 +1,9 @@
 dpgclj - Diceware™ password generator in Clojure
 ===========================================================
 
+[![Travis Build Status](https://travis-ci.org/MaciekTalaska/dpgclj.svg?branch=master)](https://travis-ci.org/MaciekTalaska/dpgclj)
+
+
 This project is clojure version of [Diceware Password Generator](https://github.com/MaciekTalaska/dpg) I have written some time ago (in Rust).
 
 The aim is to create an application that could be used to generate easy to remember passwords using the Diceware™ method.
