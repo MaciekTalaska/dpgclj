@@ -5,7 +5,6 @@ matrix:
     - os: linux
       dist: trusty
       sudo: false
-    - os: osx
   fast_finish: true
 cache: cargo
 script: lein do clean, test
