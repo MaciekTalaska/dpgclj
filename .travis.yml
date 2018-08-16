@@ -14,7 +14,6 @@ jdk:
   - oraclejdk10
   - oraclejdk11
   - openjdk8
-  - openjdk10
 branches:
   only:
     - master
