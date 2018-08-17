@@ -19,7 +19,6 @@
     (mapv extract-language-from-filename files)))
 
 (defstruct diceware-repository :words :length :language)
-(defstruct repository :en :pl)
 
 (defn extract-words [lines]
   (for [w lines :let [words (last (clojure.string/split w #"\s+"))]] words))
