@@ -27,11 +27,15 @@
   (let [lines (clojure.string/split-lines file)]
       (into [] (extract-words lines))))
 
+;(defn create-sub-repository [language, words-list]
+;  (struct-map diceware-repository
+;              :words words-list
+;              :length (count words-list)
+;              :language language))
 (defn create-sub-repository [language, words-list]
-  (struct-map diceware-repository
-    :words words-list
+    {:words words-list
     :length (count words-list)
-    :language language))
+    :language language})
 
 (defn create-repository [language, file]
   (let [words (extract-words-from-file file)]
@@ -45,10 +49,12 @@
              (slurp (file-language :filename)))
             ) all-files)))
 
+;(defn get-repo-by-language [language, repositories]
+;  (if (= language ((first repositories) :language))
+;    (first repositories)
+;    (last repositories)))
 (defn get-repo-by-language [language, repositories]
-  (if (= language ((first repositories) :language))
-    (first repositories)
-    (last repositories)))
+    (first (filter (fn [x] (= language (:language x))) repositories)))
 
 (defn diceware-info [diceware]
   (println "---[ repository info ]---")
