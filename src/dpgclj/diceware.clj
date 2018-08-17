@@ -22,13 +22,11 @@
 (defstruct repository :en :pl)
 
 (defn extract-words [lines]
-  (for [w lines :let [words (last (clojure.string/split w #"\t"))]] words))
+  (for [w lines :let [words (last (clojure.string/split w #"\s+"))]] words))
 
 (defn extract-words-from-file [file]
   (let [lines (clojure.string/split-lines file)]
-    (if (clojure.string/includes? (first lines) "\t")
-      (into [] (extract-words lines))
-      lines)))
+      (into [] (extract-words lines))))
 
 (defn create-sub-repository [language, words-list]
   (struct-map diceware-repository
