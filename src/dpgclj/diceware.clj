@@ -18,7 +18,7 @@
   (let [files (get-all-diceware-files)]
     (mapv extract-language-from-filename files)))
 
-(defstruct diceware-repository :words :length :dices :language)
+(defstruct diceware-repository :words :length :language)
 (defstruct repository :en :pl)
 
 (defn extract-words [lines]
@@ -32,7 +32,6 @@
   (struct-map diceware-repository
     :words words-list
     :length (count words-list)
-    :dices 0
     :language language))
 
 (defn create-repository [language, file]
@@ -57,6 +56,5 @@
   (println "  type: " (str (type diceware)))
   (println "  language: " (str (diceware :language)))
   (println "  first words: " (clojure.string/join "-" (take 10 (diceware :words))))
-  ;; (println "  dices: " (str (diceware :dices)))
   (println "  lenght: " (str (diceware :length))))
 
