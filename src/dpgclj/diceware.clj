@@ -18,8 +18,6 @@
   (let [files (get-all-diceware-files)]
     (mapv extract-language-from-filename files)))
 
-(defstruct diceware-repository :words :length :language)
-
 (defn extract-words [lines]
   (for [w lines :let [words (last (clojure.string/split w #"\s+"))]] words))
 
@@ -27,6 +25,10 @@
   (let [lines (clojure.string/split-lines file)]
       (into [] (extract-words lines))))
 
+; TODO: q: why using struct-map makes it so hard to check returned data in repl?
+
+;(defstruct diceware-repository :words :length :language)
+;
 ;(defn create-sub-repository [language, words-list]
 ;  (struct-map diceware-repository
 ;              :words words-list
@@ -49,12 +51,8 @@
              (slurp (file-language :filename)))
             ) all-files)))
 
-;(defn get-repo-by-language [language, repositories]
-;  (if (= language ((first repositories) :language))
-;    (first repositories)
-;    (last repositories)))
 (defn get-repo-by-language [language, repositories]
-    (first (filter (fn [x] (= language (:language x))) repositories)))
+  (first (filter (fn [x] (= language (:language x))) repositories)))
 
 (defn diceware-info [diceware]
   (println "---[ repository info ]---")
