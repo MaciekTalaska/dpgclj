@@ -52,6 +52,23 @@ To test dpgclj, or some of its functions, type `lein repl`.
 
 2. `java -jar target/uberjar/dpgclj-0.1.0-SNAPSHOT-standalone.jar`. All options could be passed after the name of the jar file to be executed. 
 
+## Running tests
+
+`Dpgclj` contains some unit tests, and by default Travis-Ci is used to run tests against each and every commit (or rather push) to the github repository. 
+
+It is also possible to run test locally using lein: `lein test`. This method has one disadvantage - it takes significant time to startup lein itself, so it often takes ~4-5 seconds (or even more) to get info on failing/passing tests.
+
+It is also possible to run tests within Clojure repl, as follows:
+1. Run repl (`lein repl` from withing the folder into which `dpgclj` was cloned)
+2. Load Clojure testing namespace: `(use 'clojure.test)`
+3. Load namespaces containing tests: `(use 'dpgclj.crypt-test)` and `(use 'dpgclj.options-test)`
+4. Run tests 
+ * `(run-all-tests)` - run tests from all namespaces loaded
+ * `(run-tests 'dpgclj.options-test)` - run test from single namespace
+ * `(run-tests 'dpgclj.options-test 'dpgclj.crypto-test)` - run tests from all (explicitly) specified namespaces
+ 
+If you're using Emacs/Spacemacs with Cider plugin (don't know about other editors/IDE) it is also possible to conveniently run tests from the editor itself. 
+
 ## Diceware™
 
 Diceware is a trademark of A G Reinhold. More info: http://world.std.com/~reinhold/diceware.html
