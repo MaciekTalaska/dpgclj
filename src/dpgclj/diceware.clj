@@ -28,20 +28,17 @@
 ; TODO: q: why using struct-map makes it so hard to check returned data in repl?
 
 ;(defstruct diceware-repository :words :length :language)
-;
-;(defn create-sub-repository [language, words-list]
-;  (struct-map diceware-repository
-;              :words words-list
-;              :length (count words-list)
-;              :language language))
-(defn create-sub-repository [language, words-list]
-    {:words words-list
-    :length (count words-list)
-    :language language})
+
+;(defn create-repository [language, file]
+;  (let [words (extract-words-from-file file)]
+;    (struct-map diceware-repository
+;                :words words
+;                :length (count words)
+;                :language language)))
 
 (defn create-repository [language, file]
   (let [words (extract-words-from-file file)]
-    (create-sub-repository language words)))
+    {:words words :length (count words) :language language}))
 
 (defn create-repositories []
   (let [all-files (get-files-with-languages)]
