@@ -3,9 +3,9 @@
   (:require [dpgclj.crypto :as crypto]))
 
 (defn get-random-word [language, repositories]
-  (let [repo (dw/get-repo-by-language language repositories)]
-    (let [index (crypto/secure-rand-int (dec (repo :length)))]
-      (nth (get repo :words) index))))
+  (let [repo (dw/get-repo-by-language language repositories)
+        index (crypto/secure-rand-int (dec (repo :length)))]
+    (nth (get repo :words) index)))
 
 (defn get-random-words [language, repositories, count]
   (mapv (fn [x] (get-random-word language, repositories)) (range count)))
